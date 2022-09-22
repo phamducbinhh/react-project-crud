@@ -1,7 +1,27 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
+import { toast } from 'react-toastify';
+import { GetAllUsers } from '../Api/User-Api';
 
 const TableUser = () => {
+    const [ListUsers, SetListUsers] = useState([]);
+    const getUsersData = async () => {
+        try {
+            const respones = await GetAllUsers();
+            if (respones && respones.data) {
+                SetListUsers(respones.data);
+            }
+        } catch (err) {
+            toast.error(err.message, {
+                pauseOnHover: false,
+                delay: 0,
+            });
+        }
+    };
+
+    useEffect(() => {
+        getUsersData();
+    }, []);
     return (
         <Fragment>
             <div className="my-5 d-flex justify-content-between align-items-center">
@@ -13,30 +33,22 @@ const TableUser = () => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>ID</th>
+                        <th>Email</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Username</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td colSpan={2}>Larry the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
+                    {ListUsers.length > 0 &&
+                        ListUsers?.map((item) => (
+                            <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.email}</td>
+                                <td>{item.first_name}</td>
+                                <td>{item.last_name}</td>
+                            </tr>
+                        ))}
                 </tbody>
             </Table>
         </Fragment>
