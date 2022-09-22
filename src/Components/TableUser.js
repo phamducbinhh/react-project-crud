@@ -2,14 +2,17 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import { toast } from 'react-toastify';
 import { GetAllUsers } from '../Api/User-Api';
+import Pagination from './Pagination';
 
 const TableUser = () => {
-    const [ListUsers, SetListUsers] = useState([]);
-    const getUsersData = async () => {
+    const [listUsers, setListUsers] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const getUsersData = async (page) => {
         try {
-            const respones = await GetAllUsers();
+            const respones = await GetAllUsers(page);
             if (respones && respones.data) {
-                SetListUsers(respones.data);
+                setListUsers(respones.data);
+                setPageCount(respones.total_pages);
             }
         } catch (err) {
             toast.error(err.message, {
@@ -18,10 +21,14 @@ const TableUser = () => {
             });
         }
     };
-
     useEffect(() => {
         getUsersData();
     }, []);
+
+    //paginate
+    const handlePageClick = (e) => {
+        getUsersData(Number(e.selected + 1));
+    };
     return (
         <Fragment>
             <div className="my-5 d-flex justify-content-between align-items-center">
@@ -40,8 +47,8 @@ const TableUser = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {ListUsers.length > 0 &&
-                        ListUsers?.map((item) => (
+                    {listUsers.length > 0 &&
+                        listUsers?.map((item) => (
                             <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>{item.email}</td>
@@ -51,6 +58,7 @@ const TableUser = () => {
                         ))}
                 </tbody>
             </Table>
+            <Pagination pageCount={pageCount} handlePageClick={handlePageClick} />
         </Fragment>
     );
 };
