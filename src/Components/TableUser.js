@@ -2,11 +2,15 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import { toast } from 'react-toastify';
 import { GetAllUsers } from '../Api/User-Api';
+import { useAuth } from '../Context/UseContext';
+import ModalAddUser from './ModalAddUser';
 import Pagination from './Pagination';
 
 const TableUser = () => {
+    const { handleShow } = useAuth();
     const [listUsers, setListUsers] = useState([]);
     const [pageCount, setPageCount] = useState(0);
+
     const getUsersData = async (page) => {
         try {
             const respones = await GetAllUsers(page);
@@ -29,11 +33,16 @@ const TableUser = () => {
     const handlePageClick = (e) => {
         getUsersData(Number(e.selected + 1));
     };
+
+    //render khi add users
+    const UpdateCreateUsers = (user) => {
+        setListUsers([user, ...listUsers]);
+    };
     return (
         <Fragment>
             <div className="my-5 d-flex justify-content-between align-items-center">
                 <h3>List User</h3>
-                <button type="button" className="btn btn-success">
+                <button type="button" className="btn btn-success" onClick={handleShow}>
                     Add New User
                 </button>
             </div>
@@ -59,6 +68,7 @@ const TableUser = () => {
                 </tbody>
             </Table>
             <Pagination pageCount={pageCount} handlePageClick={handlePageClick} />
+            <ModalAddUser UpdateCreateUsers={UpdateCreateUsers} />
         </Fragment>
     );
 };

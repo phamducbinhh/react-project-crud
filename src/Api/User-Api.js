@@ -3,4 +3,12 @@ import axios from './Customize-Axios';
 const GetAllUsers = (page) => {
     return axios.get(`/api/users?page=${page}`);
 };
-export { GetAllUsers };
+
+//post api User -> render Ui
+const PostCreateUser = (name, job) => {
+    return axios.post(`/api/users`, {
+        name,
+        job,
+    });
+};
+export { GetAllUsers, PostCreateUser };
