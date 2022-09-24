@@ -11,4 +11,9 @@ const PostCreateUser = (name, job) => {
         job,
     });
 };
-export { GetAllUsers, PostCreateUser };
+
+//delete api user
+const DeleteUser = (id) => {
+    return axios.delete(`/api/users/${id}`);
+};
+export { GetAllUsers, PostCreateUser, DeleteUser };

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useAuth } from '../Context/UseContext';
 import { toast } from 'react-toastify';
 import { PostCreateUser } from '../Api/User-Api';
 
-const ModalAddUser = ({ UpdateCreateUsers }) => {
-    const { show, handleClose } = useAuth();
+const ModalAddUser = ({ UpdateCreateUsers, showModalAddUser, handleClose }) => {
     const [name, setName] = useState('');
     const [job, setJob] = useState('');
 
@@ -33,9 +31,9 @@ const ModalAddUser = ({ UpdateCreateUsers }) => {
     };
 
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={showModalAddUser} onHide={handleClose} backdrop="static" keyboard={false}>
             <Modal.Header closeButton>
-                <Modal.Title>Modal heading</Modal.Title>
+                <Modal.Title>Add New User</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="body-add-new">
