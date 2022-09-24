@@ -55,6 +55,14 @@ const TableUser = () => {
         setDataUserDelete(user);
         setShowModalDelete(true);
     };
+
+    //ham delete user đối với trường hợp ko có database mới dùng cách này
+    const DeleteUserModal = (user) => {
+        const cloneListUsers = [...listUsers];
+        const newListUsers = cloneListUsers.filter((item) => item.id !== user.id);
+        setListUsers(newListUsers);
+    };
+
     return (
         <Fragment>
             <div className="my-5 d-flex justify-content-between align-items-center">
@@ -109,6 +117,7 @@ const TableUser = () => {
                 showModalDelete={showModalDelete}
                 handleClose={handleClose}
                 dataUserDelete={dataUserDelete}
+                DeleteUserModal={DeleteUserModal}
             />
         </Fragment>
     );
