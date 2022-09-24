@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { GetAllUsers } from '../Api/User-Api';
 import ModalAddUser from './ModalAddUser';
 import ModalDeleteUser from './ModalDeleteUser';
+import ModalEditUser from './ModalEditUser';
 import Pagination from './Pagination';
 
 const TableUser = () => {
@@ -11,8 +12,11 @@ const TableUser = () => {
     const [pageCount, setPageCount] = useState(0);
     const [showModalAddUser, setShowModalAddUser] = useState(false);
     const [showModalDelete, setShowModalDelete] = useState(false);
+    const [showModalEdit, setShowModalEdit] = useState(false);
     //state lưu thông tin người muốn xóa
     const [dataUserDelete, setDataUserDelete] = useState({});
+    //state lưu thông tin người muốn edit
+    const [dataUserEdit, setDataUserEdit] = useState({});
 
     const getUsersData = async (page) => {
         try {
@@ -38,14 +42,22 @@ const TableUser = () => {
     };
 
     //render khi add users
-    const UpdateCreateUsers = (user) => {
+    const handleUpdateTable = (user) => {
         setListUsers([user, ...listUsers]);
+    };
+
+    //render khi edit user
+    const handleUpdateEditUser = (user) => {
+        let cloneListUsersEdit = [...listUsers];
+        const index = cloneListUsersEdit.findIndex((item) => item.id === user.id);
+        cloneListUsersEdit[index].first_name = user.first_name;
     };
 
     //close modal
     const handleClose = () => {
         setShowModalAddUser(false);
         setShowModalDelete(false);
+        setShowModalEdit(false);
     };
     //show modal add user
     const handleShowAddUser = () => setShowModalAddUser(true);
@@ -61,6 +73,12 @@ const TableUser = () => {
         const cloneListUsers = [...listUsers];
         const newListUsers = cloneListUsers.filter((item) => item.id !== user.id);
         setListUsers(newListUsers);
+    };
+
+    //show modal edit
+    const handleShowEdit = (user) => {
+        setDataUserEdit(user);
+        setShowModalEdit(true);
     };
 
     return (
@@ -91,7 +109,11 @@ const TableUser = () => {
                                 <td>{item.last_name}</td>
                                 <td>
                                     <div className="d-flex justify-content-center">
-                                        <button type="button" className="btn btn-warning me-md-2">
+                                        <button
+                                            type="button"
+                                            className="btn btn-warning me-md-2"
+                                            onClick={() => handleShowEdit(item)}
+                                        >
                                             Edit
                                         </button>
                                         <button
@@ -109,9 +131,15 @@ const TableUser = () => {
             </Table>
             <Pagination pageCount={pageCount} handlePageClick={handlePageClick} />
             <ModalAddUser
-                UpdateCreateUsers={UpdateCreateUsers}
+                handleUpdateTable={handleUpdateTable}
                 handleClose={handleClose}
                 showModalAddUser={showModalAddUser}
+            />
+            <ModalEditUser
+                showModalEdit={showModalEdit}
+                handleClose={handleClose}
+                dataUserEdit={dataUserEdit}
+                handleUpdateEditUser={handleUpdateEditUser}
             />
             <ModalDeleteUser
                 showModalDelete={showModalDelete}

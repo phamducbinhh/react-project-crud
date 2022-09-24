@@ -38,7 +38,7 @@ const ModalDeleteUser = ({ handleClose, showModalDelete, dataUserDelete, DeleteU
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={() => confirmDelete()}>
+                    <Button variant="primary" onClick={confirmDelete}>
                         Confirm
                     </Button>
                 </Modal.Footer>

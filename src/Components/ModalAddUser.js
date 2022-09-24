@@ -4,14 +4,14 @@ import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import { PostCreateUser } from '../Api/User-Api';
 
-const ModalAddUser = ({ UpdateCreateUsers, showModalAddUser, handleClose }) => {
+const ModalAddUser = ({ handleUpdateTable, showModalAddUser, handleClose }) => {
     const [name, setName] = useState('');
     const [job, setJob] = useState('');
 
     const handlePostCreateUser = async () => {
         try {
             const response = await PostCreateUser(name, job);
-            UpdateCreateUsers({
+            handleUpdateTable({
                 first_name: response.name,
                 id: response.id,
             });
